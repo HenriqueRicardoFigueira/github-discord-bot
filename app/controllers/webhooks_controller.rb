@@ -28,7 +28,7 @@ class WebhooksController < ApplicationController
               when 'published'
                 "New release: #{payload['release']['tag_name']}, Author: #{payload['release']['author']['login']} #{payload['release']['body']}}"
               end
-    bot.send_message(1153312562579001346, message)
+    bot.send_message(DISCORD_CHANNEL_ID, message)
   end
 
 end
