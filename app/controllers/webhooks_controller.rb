@@ -24,14 +24,26 @@ class WebhooksController < ApplicationController
   def define_mesasge
     case @payload['action']
     when 'released'
-      "New release: #{@payload['release']['tag_name']}, Author: #{@payload['release']['author']['login']} #{@payload['release']['body']}}"
+      released
     when 'labeled'
-      if @payload['label']['name'].include?('code review')
-        "PR ##{@payload['pull_request']['number']} - #{@payload['pull_request']['title']} has been labeled for code review"
-      end
+      labeled
     when 'published'
-      "New release: #{@payload['release']['tag_name']}, Author: #{@payload['release']['author']['login']} #{@payload['release']['body']}}"
+      published
     end
+  end
+
+  def published
+    "New release: #{@payload['release']['tag_name']}, Author: #{@payload['release']['author']['login']} #{@payload['release']['body']}}"
+  end
+
+  def labeled
+    return unless !@payload['label']['name'].include?('code review')
+    
+    "PR ##{@payload['pull_request']['number']} - #{@payload['pull_request']['title']} has been labeled for code review"
+  end
+
+  def released
+    "New release: #{@payload['release']['tag_name']}, Author: #{@payload['release']['author']['login']} #{@payload['release']['body']}}"
   end
 
 end
